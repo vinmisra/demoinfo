@@ -1,3 +1,5 @@
+Modification of [DemoInfo](https://github.com/StatsHelix/demoinfo) to parse UserCommands for POV .dem files. 
+
 #DemoInfo
 
 This is a C#-Library that makes reading CS:GO-Demos and analyzing them easier. 

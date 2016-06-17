@@ -625,8 +625,154 @@ namespace DemoInfo
 				BitStream.EndChunk();
 				break;
 			case DemoCommand.UserCommand:
-				BitStream.ReadInt(32);
-				BitStream.BeginChunk(BitStream.ReadSignedInt(32) * 8);
+				uint first = BitStream.ReadInt(32);
+				int second = BitStream.ReadSignedInt(32);
+				uint tick_cnt = 0;
+				uint buttons = 0;
+				int mouseX = 0;
+				int mouseY = 0;
+
+				BitStream.BeginChunk(second * 8);
+				if (BitStream.ReadBit()){
+					tick_cnt = BitStream.ReadInt(32);
+					// Console.WriteLine("Tick: {0}",tick);
+				}
+				if (BitStream.ReadBit()){
+					uint command_cnt = BitStream.ReadInt(32);
+					//Console.WriteLine("Usercmd tick: {0}, Command count: {1}, thistick: {2}, IngameTick: {3}",tick_cnt, command_cnt,this.CurrentTick,IngameTick);
+				}
+
+				if (BitStream.ReadBit()){
+					float viewx = BitStream.ReadFloat();
+					// Console.WriteLine("ViewangleX: {0}",viewx);
+				}
+				// else {
+				// 	Console.WriteLine("No ViewangleX change.");
+				// }
+				if (BitStream.ReadBit()){
+					float viewy = BitStream.ReadFloat();
+					// Console.WriteLine("ViewangleY: {0}",viewy);
+				}
+				// else {
+				// 	Console.WriteLine("No ViewangleY change.");
+				// }
+				if (BitStream.ReadBit()){
+					float viewz = BitStream.ReadFloat();
+					// Console.WriteLine("ViewangleZ: {0}",viewz);
+				}
+				// else {
+				// 	Console.WriteLine("No ViewangleZ change.");
+				// }
+				if (BitStream.ReadBit()){
+					BitStream.ReadFloat();
+					// Console.WriteLine("aimangleX: {0}",BitStream.ReadFloat());
+				}
+				// else {
+				// 	Console.WriteLine("No aimangleX change.");
+				// }
+				if (BitStream.ReadBit()){
+					BitStream.ReadFloat();
+					// Console.WriteLine("aimangleY: {0}",BitStream.ReadFloat());
+				}
+				// else {
+				// 	Console.WriteLine("No aimangleY change.");
+				// }
+				if (BitStream.ReadBit()){
+					BitStream.ReadFloat();
+					// Console.WriteLine("aimngleZ: {0}",BitStream.ReadFloat());
+				}
+				// else {
+				// 	Console.WriteLine("No aimangleZ change.");
+				// }
+
+				//movement
+				if (BitStream.ReadBit()){
+					BitStream.ReadFloat();
+					// Console.WriteLine("forward: {0}",BitStream.ReadFloat());
+				}
+				// else {
+				// 	Console.WriteLine("No forward change.");
+				// }
+				if (BitStream.ReadBit()){
+					BitStream.ReadFloat();
+					// Console.WriteLine("side: {0}",BitStream.ReadFloat());
+				}
+				// else {
+				// 	Console.WriteLine("No side change.");
+				// }
+				if (BitStream.ReadBit()){
+					BitStream.ReadFloat();
+					// Console.WriteLine("up: {0}",BitStream.ReadFloat());
+				}
+				// else {
+				// 	Console.WriteLine("No up change.");
+				// }
+
+				if (BitStream.ReadBit()){
+					buttons = BitStream.ReadInt(32);
+					// Console.WriteLine("Buttons: {0}",BitStream.ReadInt(32));
+				}
+				// else {
+				// 	Console.WriteLine("No button change");
+				// }
+
+				if (BitStream.ReadBit()) {
+					BitStream.ReadByte();
+					// Console.WriteLine("Impulse: {0}",BitStream.ReadByte());
+				}
+				// else {
+				// 	Console.WriteLine("No impulse change");
+				// }
+
+				if (BitStream.ReadBit()) {
+					BitStream.ReadInt(11);
+					if (BitStream.ReadBit()) {
+						BitStream.ReadInt(6);
+					}
+
+					// Console.WriteLine("WeaponSelect: {0}",BitStream.ReadInt(11));
+					// if (BitStream.ReadBit()) {
+					// 	Console.WriteLine("WeaponSubType: {0}",BitStream.ReadInt(6));
+					// }
+					// else {
+					// 	Console.WriteLine("No subtype change.");
+					// }
+				}
+				// else {
+				// 	Console.WriteLine("No weaponselect change");
+				// }
+				if (BitStream.ReadBit()) {
+					mouseX=BitStream.ReadSignedInt(16);
+					// Console.WriteLine("MouseX: {0}",BitStream.ReadSignedInt(16));
+				}
+				// else {
+				// 	Console.WriteLine("No mouseX change");
+				// }
+				if (BitStream.ReadBit()) {
+					mouseY=BitStream.ReadSignedInt(16);
+					// Console.WriteLine("MouseY: {0}",BitStream.ReadSignedInt(16));
+				}
+				// else {
+				// 	Console.WriteLine("No mouseY change");
+				// }
+				uint leftclick = (buttons&1);
+				uint left = (buttons&512)>>9;
+				uint right = (buttons&1024)>>10;
+				uint forward = (buttons&8)>>3;
+				uint back = (buttons&16)>>4;
+				uint space = (buttons&2)>>1;
+				uint ctrl = (buttons&4)>>2;
+				Console.WriteLine("{0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10}",IngameTick,buttons,mouseX,mouseY,leftclick,left,right,forward,back,space,ctrl);
+				// if (BitStream.ReadBit()){
+				// 	Console.WriteLine("Tick number {0}",BitStream.ReadInt(32));
+				// }
+				// if (BitStream.ReadBit()){
+				// 	Console.WriteLine("Command number {0}",BitStream.ReadInt(32));
+				// }
+				// // Console.WriteLine("Tick number? {0}, Command number? {1}", BitStream.ReadInt(32),BitStream.ReadInt(32));
+				// for (int i =0;i<second-8;i++ ){
+				// 	Console.WriteLine("Mystery Byte: {0}",BitStream.ReadByte());
+				// }
 				BitStream.EndChunk();
 				break;
 			case DemoCommand.Signon:

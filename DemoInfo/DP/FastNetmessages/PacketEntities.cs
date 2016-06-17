@@ -28,7 +28,7 @@ namespace DemoInfo
 
 					var len = bitstream.ReadProtobufVarInt();
 					bitstream.BeginChunk(len * 8);
-					DemoInfo.DP.Handler.PacketEntitesHandler.Apply(this, bitstream, parser);
+					// DemoInfo.DP.Handler.PacketEntitesHandler.Apply(this, bitstream, parser); //giving problems with POV demos, courtesy Vin.
 					bitstream.EndChunk();
 					if (!bitstream.ChunkFinished)
 						throw new NotImplementedException("Lord Gaben wasn't nice to us :/");
